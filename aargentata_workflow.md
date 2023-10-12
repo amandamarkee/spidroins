@@ -61,3 +61,55 @@ Run blastx command to blast Texas PacBio genome against the generated db:
 blastx -query <seqs.fasta> -db /apps/blast/databases/nr -outfmt 5 -max_target_seqs 200 -evalue 1e-5 -out xml/results.xml
 blastx -query /home/amarkee/nas4/aargentata_genome/AargTX_hifiasm_I.fasta -db /home/amarkee/nas4/aargentata_genome/Orbic_NandCtermini_proII_db.fasta -outfmt 5 -max_target_seqs 200 -evalue 1e-5 -out /home/amarkee/nas4/aargentata_genome/blastx/aarg_pbTX/results.xml
 ```
+
+Note: Because I'll be running this for the five genomes (2 full-length Oxford Nanopore, 2 full-length PacBio Haplotypes, and 1 full-length PacBio Primary), I edited the 
+following script for each input genome fasta file:
+```
+#PBS -V
+#PBS -q batch 
+#PBS -l select=1:ncpus=25
+#PBS -o /home/amarkee/nas4/aargentata_genome/blastx/aarg_pbTX
+#PBS -e /home/amarkee/nas4/aargentata_genome/blastx/aarg_pbTX
+#PBS -M amarkee@amnh.org
+#PBS -m abe
+#PBS -N blastx_aarg
+#PBS -l walltime=9999:00:00
+
+module load ncbi-blast-2.12.0+
+
+blastx -query /home/amarkee/nas4/aargentata_genome/AargTX_hifiasm_hap2.fasta -db /home/amarkee/nas4/aargentata_genome/Orbic_NandCtermini_proII_db.fasta -outfmt 6 -max_target_seqs 200 -evalue 1e-5 -out /home/amarkee/nas4/aargentata_genome/blastx/aarg_pbTX/hap2_results.txt
+```
+
+I tried to convert this below as a script 'universal_blastx.sh' that uses environmental variables, but have not tested it yet since I already submit all 5 scripts:
+```
+qsub universal_blastx.sh <input.fa> <protein_db.fa> <output.file>
+```
+
+```
+#!/bin/bash
+#PBS -V
+#PBS -q batch 
+#PBS -l select=1:ncpus=25
+#PBS -o $PBS_OUT_DIR #manually change out dir
+#PBS -e $PBS_ERR_DIR #manually change error dir
+#PBS -M $PBS_EMAIL
+#PBS -m abe
+#PBS -N blastx_aarg
+#PBS -l walltime=9999:00:00
+
+module load ncbi-blast-2.12.0+
+
+inputfasta=${1}
+blastdb=${2}
+outputfile=${3}
+
+
+blastx -query ${inputfasta} \
+-db ${blastdb} \
+-outfmt 6 \
+-max_target_seqs 200 \
+-evalue 1e-5 \
+-out ${outputfile}
+```
+
+
