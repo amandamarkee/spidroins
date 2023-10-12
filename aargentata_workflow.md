@@ -35,7 +35,7 @@ in each genome, and use the conserved terminal regions to find them.
 Navigate to the working directory
 ```
 cd /home/amarkee/nas4/aargentata_genome/blastx/aarg_pbTX
-module load blast-2.2.26
+module load ncbi-blast-2.12.0+
 ```
 
 Create a protein database using the termini database file Rick sent:
