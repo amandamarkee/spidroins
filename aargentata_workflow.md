@@ -150,6 +150,87 @@ the sister species _Argiope aurantia_ and reasonable gene length from each termi
 making the gene ~37,148 bp long and within reasonable range. 
 
 
+## Step 3) Extract spidroins in Geneious
+
+[add text and screenshots for this section later]
+
+
+## Step 4) Mapping RNAseq for intron/exon boundaries in Minimap2
+
+For this section, I've switched over to the Mendel cluster to use Minimap2 using a looped SLURM submission. I was having issues getting this to run on Huxley due to the organization of Huxley packages, but have installed all necessary packages in miniconda3 on Mendel.
+
+Below is the first script used, which maps each set of paired RNAseq reads to the "reference genome", where the genome is simply the concattonated fasta of all spidroins from a genome. In this case, the reference file is here:
+
+```
+/home/amarkee/mendel-nas1/raw_data/extracted_spidroins/aarg_pbTX_final.fasta
+```
+
+Script for mapping with Minimap2:
+```
+#!/bin/bash
+
+#SBATCH --nodes=1
+#SBATCH --ntasks=12
+#SBATCH --cpus-per-task=1
+#SBATCH --mem=95G
+#SBATCH --time=100:00:00
+#SBATCH --output=minimap2.out
+#SBATCH --mail-user=amarkee@amnh.org
+#SBATCH --mail-type=ALL
+#SBATCH --job-name=rna_minimap2
+
+source ~/.bash_profile
+conda activate spidroins
+module load Samtools/samtools-1.11
+
+# Specify the input folder containing paired-end reads
+input_folder="/home/amarkee/mendel-nas1/raw_data/rna_seq"
+
+# Specify the reference FASTA file
+reference_fasta="/home/amarkee/mendel-nas1/raw_data/extracted_spidroins/aarg_pbTX_final.fasta"
+
+# Specify the output SAM, BAM, and sorted BAM files
+output_prefix="aarg_pbTX_mapped"
+sam_file="${output_prefix}.sam"
+bam_file="${output_prefix}.bam"
+sorted_bam_file="${output_prefix}.sorted.bam"
+
+# Create an array of input files (assuming the reads are in pairs)
+read_files=(${input_folder}/*_1.fq)
+
+# Loop through the array of input files
+for read_file in "${read_files[@]}"; do
+    # Generate the corresponding read pair file
+    read_pair="${read_file/_1.fq/_2.fq}"
+
+    # Generate the output SAM file based on the input file names
+    output_sam="${output_prefix}_$(basename ${read_file%_1.fq}).sam"
+
+    # Run minimap2 for each pair of reads
+    minimap2 -ax sr ${reference_fasta} ${read_file} ${read_pair} > ${output_sam}
+
+    # Convert SAM to BAM
+    samtools view -bS ${output_sam} > ${output_sam/.sam/.bam}
+
+    # Sort BAM file
+    samtools sort ${output_sam/.sam/.bam} -o ${output_sam/.sam/.sorted.bam}
+
+    # Index sorted BAM file
+    samtools index ${output_sam/.sam/.sorted.bam}
+
+    # Remove intermediate SAM and BAM files
+    rm ${output_sam} ${output_sam/.sam/.bam}
+done
+```
+
+Interactive node commands for creating "genome" index file for concattonated spidroin fasta:
+```
+srun --nodes=1 --ntasks=1 --ntasks-per-node=1 --mem-per-cpu=4GB --time=01:00:00  --job-name=my_interactive_job  --pty bash
+
+module load Samtools/samtools-1.11
+samtools faidx /home/amarkee/mendel-nas1/raw_data/extracted_spidroins/aarg_pbTX_final.fasta
+```
+
 
 
 
