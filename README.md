@@ -1,4 +1,4 @@
-# Genomic characterization of spider silk in _Argiope argentata_
+# Genomic characterization of spider silk genes in the silver garden spider _Argiope argentata_
 
 The silver garden spider (_Argiope argentata_) is an orb-weaving spider in the family Araneidae, with seven distinct types of silk: major ampullate (MaSp), minor ampullate (MiSp), flagelliform (FlAg), aggregate (AgSp), aciniform (AcSp), tubuliform (TuSp) and pyriform (PySp). Each silk type is characterized based on the gland they originate from, and have variation in the properties of silk the produce. 
 
