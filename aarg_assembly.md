@@ -1,3 +1,5 @@
+# Whole genome assembly of _Argiope argentata_ (PacBio HiFi)
+
 ## **Background**
 
 The goal of this workflow is to take note of assembly details for the five California _Argiope argentata_ genomes. Once genomes are assembled, each pair of haplotype assemblies will be used to assess interspecific (allelic) variation in silk genes
