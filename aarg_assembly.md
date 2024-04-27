@@ -41,26 +41,31 @@ These are the resulting paths to the extracted fastq files:
 /home/amarkee/nas5/Aarg_G2/hifi_reads/m84100_240128_044323_s3.hifi_reads.bc1045.fastq
 ```
 
-## **Raw Read Quality Assessment with FastQC **
+## **Raw Read Quality Assessment with FastQC**
 
 [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) is a quality assessment tool for assessing raw read quality of next generation sequencing. 
 
-Copy the following script into the directory containing HiFi reads (Mendel)
+Copy the following script into the directory containing HiFi reads (SLURM for Mendel; PBS for Huxley)
 ```
-#!/bin/sh
-#SBATCH --job-name fastqc_aarg
-#SBATCH --nodes=1
-#SBATCH --mem=40gb
-#SBATCH --tasks-per-node=5 # Number of cores per node
-#SBATCH --time=40:00:00
-#SBATCH --mail-type=ALL
-#SBATCH --mail-user=amarkee@amnh.org
-#SBATCH --output=slurm-%j-%x.out
+#!/bin/bash
+#PBS -V
+#PBS -q batch
+#PBS -l select=1:ncpus=25
+#PBS -o /home/amarkee/nas4/aargentata_genome/fastqc/Aarg_B1                
+#PBS -e /home/amarkee/nas4/aargentata_genome/fastqc/Aarg_B1               
+#PBS -M amarkee@amnh.org
+#PBS -m abe
+#PBS -N aarg_fastqc
+#PBS -l walltime=40:00:00
+
 #conda init
 source ~/.bash_profile
 conda activate spidroins
 
-fastqc
+module load fastqc-0.11.9
+
+## run fastqc on the data 
+fastqc /home/amarkee/nas5/Aarg_B1/hifi_reads/m84100_240126_204718_s4.hifi_reads.bc1046.fastq
 
 ```
 
@@ -98,7 +103,7 @@ Below is the script for assembling the genome with standard duplicate purging en
 
 #conda init
 source ~/.bash_profile
-conda activate fasciatus_ass
+conda activate spidroins
 
 hifiasm -o /home/amarkee/nas4/aargentata_genome/assemblies/primary_asm/Aarg_B1/aarg_b1_assembly.asm -l 2 -t 32 /home/amarkee/nas5/Aarg_B1/hifi_reads/m84100_240126_204718_s4.hifi_reads.bc1046.fastq
 
