@@ -111,6 +111,26 @@ hifiasm -o /home/amarkee/nas4/aargentata_genome/assemblies/primary_asm/Aarg_B1/a
 
 ```
 
+Because of extensive resource use between Huxley and Mendel, I'm running the Aarg_B1 assembly on Huxley, and the Aarg_G2 assembly on Mendel. Below is the SLURM submission required to run the assembly on Mendel:
+```
+#!/bin/bash
+#SBATCH --job-name aargb1_hifiasm
+#SBATCH --nodes=16
+#SBATCH --mem=100gb
+#SBATCH --tasks-per-node=1 # Number of cores per node
+#SBATCH --time=90:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=amarkee@amnh.org
+#SBATCH --output=slurm-%j-%x.out
+
+#conda init
+source ~/.bash_profile
+conda activate spidroins
+
+hifiasm -o /home/amarkee/mendel-nas1/aarg_pbCA/assemblies/aarg_b1_assembly.asm -l 2 -t 32 /home/amarkee/mendel-nas1/raw_data/aarg_raw/Aarg_B1/m84100_240126_204718_s4.hifi_reads.bc1046.fq.gz
+```
+
+
 <br />
 
 ## **Genome Assembly QC With assemblystats.py**
