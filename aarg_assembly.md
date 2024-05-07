@@ -257,16 +257,16 @@ chmod +x assemblystats.py
 
 Then, I produced a FASTA file from the initial GFA output files from the hifiasm assembly output for haplotype 1, haplotype 2, and total. I used the primary contig file, as indicated with asm.bp.p_ctg.fa (p_ctg meaning primary contig)
 ```
-awk '/^S/{print ">"$2;print $3}' XXX_assembly.asm.bp.hap1.p_ctg.gfa > XXX_assembly.hap1.p.ctg.fa
-awk '/^S/{print ">"$2;print $3}' XXX_assembly.asm.bp.hap2.p_ctg.gfa > XXX_assembly.hap2.p.ctg.fa
-awk '/^S/{print ">"$2;print $3}' XXX_assembly.asm.bp.p_ctg.gfa > XXX_assembly.p.ctg.fa
+awk '/^S/{print ">"$2;print $3}' aarg_b1_assembly.asm.bp.hap1.p_ctg.gfa > aarg_b1_assembly.asm.bp.hap1.p_ctg.fa
+awk '/^S/{print ">"$2;print $3}' aarg_b1_assembly.asm.bp.hap2.p_ctg.gfa > aarg_b1_assembly.asm.bp.hap2.p_ctg.fa
+awk '/^S/{print ">"$2;print $3}' aarg_b1_assembly.asm.bp.p_ctg.gfa > aarg_b1_assembly.asm.bp.p_ctg.fa
 ```
 
 Lastly, I ran the assemblystats.py script on the newly generated fasta file of the fga in the format of scriptfilepath/scirptname.py nameofassembly.fa and save as a txt file 
 ```
-./assemblystats.py XXX_assembly.hap1.p.ctg.fa >> XXX_assembly.hap1.p.ctg.stats.txt
-./assemblystats.py XXX_assembly.hap2.p.ctg.fa >> XXX_assembly.hap2.p.ctg.stats.txt
-./assemblystats.py XXX_assembly.p.ctg.fa >> XXX_assembly.p.ctg.stats.txt
+./assemblystats.py aarg_b1_assembly.asm.bp.hap1.p_ctg.fa >> aarg_b1_assembly.hap1.p.ctg.stats.txt
+./assemblystats.py aarg_b1_assembly.asm.bp.hap2.p_ctg.fa >> aarg_b1_assembly.hap2.p.ctg.stats.txt
+./assemblystats.py aarg_b1_assembly.asm.bp.p_ctg.fa >> aarg_b1_assembly.p.ctg.stats.txt
 ```
 
 ## **Checking Assembly Completeness with BUSCO** 
@@ -279,9 +279,32 @@ Since the worker nodes of the AMNH's computational clusters don't have access to
 git clone https://gitlab.com/ezlab/busco.git
 cd busco/
 
-#pip install
+#pip install busco
 python -m pip install .
 ```
 
-Make sure you have all the [dependencies](https://busco.ezlab.org/busco_userguide.html#editing-busco-run-configuration) installed for the type of BUSCO run you are planning on running.
+Script for running BUSCO using the arachnida_odb10 database:
+```
+#!/bin/sh
+#SBATCH --job-name busco_aargb1
+#SBATCH --nodes=1
+#SBATCH --mem=40gb
+#SBATCH --time=144:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=amarkee@amnh.org
+
+source ~/.bash_profile
+conda activate spidroins
+
+export BUSCO_CONFIG_FILE=/home/amarkee/mendel-nas1/aarg_pbCA/busco/config/config.ini
+echo $BUSCO_CONFIG_FILE
+
+busco -i /home/amarkee/mendel-nas1/aarg_pbCA/assemblies/aarg_b1_assembly.asm.bp.p_ctg.fa \
+-o BUSCO_aargentata_b1 -l arachnida_odb10 \
+-m genome
+```
+
+
+
+
 
