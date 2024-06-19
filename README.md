@@ -14,6 +14,6 @@ This repository will serve as documenting the bioinformatic workflow required fo
 1) Raw Read Quality Control with FastQC
 2) Whole Genome Assembly with Hifiasm
 3) Assembly Quality Control with BUSCO and assemblystats.py
-4) Putitive Spidroin Identification with BLASTx
-5) Spidroin Extraction with Geneious
-6) Annotation of Intron/Exon Boundaries with IGV and Geneious
+4) Putitive Spidroin Identification with BLASTx and Excel
+5) Spidroin Extraction with Samtools
+6) Annotation of Intron/Exon Boundaries with IGV and Sequencher
