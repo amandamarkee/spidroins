@@ -2,10 +2,11 @@
 
 ## **Background**
 
-The goal of this workflow is to take note of assembly details for the five California _Argiope argentata_ genomes. Once genomes are assembled, each pair of haplotype assemblies will be used to assess interspecific (allelic) variation in silk genes
-within the spidroin gene family. I will be trying to run the genome assembler (hifiasm) on both American Museum of Natural History high-performance computing systems (Mendel and Huxley)
+The goal of this workflow is to take note of assembly details for the five California _Argiope argentata_ genomes, one Florida _Argiope argentata_ genome, and one Texas _Argiope argentata_ genome. Once whole genomes are assembled, each pair of haplotype assemblies will be used to assess intraspecific (allelic) variation of silk genes within the spidroin gene family. I will be trying to run the genome assembler (hifiasm) on both American Museum of Natural History high-performance computing systems (Mendel and Huxley), and Brigham Young University's computing system (Fulton).
 - California samples (assembled by PBF): Aarg_C1, Aarg_F1, and Aarg_H1
-- California samples (not assembled): Aarg_B1 and Aarg_G2
+- California samples (assembled by AM): Aarg_B1 and Aarg_G2
+- Texas sample (assembled by AM): AargTX
+- Florida sample (assembled by AM): AargVK1
 
 ## **Project Set-Up and File Conversion**
 
@@ -15,11 +16,18 @@ Prior to running preliminary QC and genome assembly, I will convert my Revio out
 /home/amarkee/nas5/Aarg_B1/hifi_reads
 /home/amarkee/nas5/Aarg_G2/hifi_reads
 
-# working directory for assemblies
+# raw data directory on fulton
+/home/fslcollab384/compute/genomics_workshop/aarg_g2
+/home/fslcollab384/compute/genomics_workshop/aarg_vk1
+
+# working directory for all haplotype assemblies on huxley
+/home/amarkee/nas4/aargentata_genome/assemblies/haplotype_asm
+
+# working directory for all primary assemblies on huxley
 /home/amarkee/nas4/aargentata_genome/assemblies/primary_asm
 ```
 
-I use the following script on Huxley to convert files using bedtools, changing file path locations for each of the 5 genomes. Note: in the future, I'll transform this into a cleaner environmental variable script:
+I use the following script on Huxley to convert .bam to .fastq files using bedtools, changing file path locations for each of the 5 genomes. We do this because the PacBio assembler hifiasm requires a fastq file for input. Note: in the future, I'll transform this into a cleaner environmental variable script:
 ```
 #!/bin/bash
 #PBS -V
@@ -269,6 +277,25 @@ Lastly, I ran the assemblystats.py script on the newly generated fasta file of t
 ./assemblystats.py aarg_b1_assembly.asm.bp.p_ctg.fa >> aarg_b1_assembly.p.ctg.stats.txt
 ```
 
+## **Genome Assembly QC With Quast**
+On the BYU Fulton cluster, I use a conda environment from [the SPIN grant genomics workshop](https://github.com/pbfrandsen/SPIN_workshop/tree/main) to run Quast to assess quality statistics similar to the previous script.
+
+```
+cd 
+module load miniconda3/4.12-pws-472
+conda activate quast
+```
+
+Then we can simply run quast on the assembly file. It is pretty fast so we can run it interactively and won't need to put it into a job file.
+
+```
+quast <assembly_name>.p_ctg.fasta
+```
+
+Now it will run on your genome and the results will be added to `quast_results/latest`. Once your run is complete, you can navigate to that folder. There should be a file called `report.pdf`. Go ahead and download that file with `scp` and examine it's contents. Below is a an example of the output:
+
+<img width="701" alt="Screenshot 2024-06-20 at 9 36 45 AM" src="https://github.com/amandamarkee/spidroins/assets/56971761/ed45c0eb-da2d-453a-aff3-a3ab88eba164">
+
 ## **Checking Assembly Completeness with BUSCO** 
 
 [BUSCO](https://busco.ezlab.org/busco_userguide.html) is a program that estimates genome completeness based on evolutionarily-informed expectations of gene content of near-universal single-copy orthologs.
@@ -283,7 +310,7 @@ cd busco/
 python -m pip install .
 ```
 
-Script for running BUSCO using the arachnida_odb10 database:
+Script for running BUSCO using the arachnida_odb10 database on Mendel:
 ```
 #!/bin/sh
 #SBATCH --job-name busco_aargb1
@@ -304,7 +331,25 @@ busco -i /home/amarkee/mendel-nas1/aarg_pbCA/assemblies/aarg_b1_assembly.asm.bp.
 -m genome
 ```
 
+Script for running BUSCO using the arachnida_odb10 database on Fulton:
+```
+#!/bin/bash
+#SBATCH --time=22:00:00   # walltime
+#SBATCH --ntasks=24   # number of processor cores (i.e. tasks)
+#SBATCH --nodes=1   # number of nodes
+#SBATCH --mem-per-cpu=10240M   # memory per CPU core
+#SBATCH -J "aarg_busco"   # job name
+#SBATCH --mail-user=amarkee@amnh.org   # email address
+#SBATCH --mail-type=END
+#SBATCH --mail-type=FAIL
 
 
+# Set the max number of threads to use for programs using OpenMP.
+export OMP_NUM_THREADS=$SLURM_CPUS_ON_NODE
 
+# LOAD MODULES, INSERT CODE, AND RUN YOUR PROGRAMS HERE
+module load miniconda3/4.12-pws-472
+conda activate busco
+busco -o busco_arachnida -i aarg_hifiasm.asm.bp.p_ctg.fasta -l arachnida_odb10 -c 24 -m genome --offline
 
+```
