@@ -9,11 +9,22 @@ The silver garden spider (_Argiope argentata_) is an orb-weaving spider in the f
 
 This repository will serve as documenting the bioinformatic workflow required for full assembly and annotation of six _Argiope argentata_ genomes from disperate populations in California (N=5) and Texas (N=1), as part of the first chapter of my dissertation. The ultimate goal is to assess interspecfic variation (allelic variation) of different spidroins to glean insight into the diversification and molecular evolution of this unique gene family. 
 
-## Workflow
+## Workflow for Rick (RB) Method
 
 1) Raw Read Quality Control with FastQC
 2) Whole Genome Assembly with Hifiasm
-3) Assembly Quality Control with BUSCO and assemblystats.py
+3) Assembly Quality Control with BUSCO, assemblystats.py & QUAST
 4) Putitive Spidroin Identification with BLASTx and Excel
 5) Spidroin Extraction with Samtools
 6) Annotation of Intron/Exon Boundaries with IGV and Sequencher
+
+## Workflow for automated Augustus Method
+
+1) Raw Read Quality Control with FastQC
+2) Whole Genome Assembly with Hifiasm
+3) Assembly Quality Control with BUSCO, assemblystats.py & QUAST
+4) Putitive Spidroin Identification with BLASTx and BioPython
+5) Spidroin Extraction with Samtools
+6) Annotation of Intron/Exon Boundaries _ab inition_ with Augustus
+7) (optional) Annotation of Intron/Exon Boundaries with RNAseq/CDS in Augustus
+
