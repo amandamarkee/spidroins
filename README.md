@@ -25,6 +25,6 @@ This repository will serve as documenting the bioinformatic workflow required fo
 3) Assembly Quality Control with BUSCO, assemblystats.py & QUAST
 4) Putitive Spidroin Identification with BLASTx and BioPython
 5) Spidroin Extraction with Samtools
-6) Annotation of Intron/Exon Boundaries _ab inition_ with Augustus
+6) Annotation of Intron/Exon Boundaries _ab initio_ or trained with Augustus
 7) (optional) Annotation of Intron/Exon Boundaries with RNAseq/CDS in Augustus
 
