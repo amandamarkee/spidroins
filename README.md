@@ -3,7 +3,7 @@
 The silver garden spider (_Argiope argentata_) is an orb-weaving spider in the family Araneidae, with seven distinct types of silk: major ampullate (MaSp), minor ampullate (MiSp), flagelliform (FlAg), aggregate (AgSp), aciniform (AcSp), tubuliform (TuSp) and pyriform (PySp). Each silk type is characterized based on the gland they originate from, and have variation in the properties of silk the produce. Spider fibroins, further referred to as _spidroins_, are a family of silk proteins produced by long, highly repetitive, glycine-rich genes.
 
 </br>
-<img width="981" alt="Screenshot 2024-04-26 at 10 06 26 PM" src="https://github.com/amandamarkee/spidroins/assets/56971761/5df66f95-9789-46d8-9c9b-b9acee02dd9e">
+<img width="1448" alt="Screenshot 2024-06-27 at 5 32 20 PM" src="https://github.com/amandamarkee/spidroins/assets/56971761/c0e7bfcb-6dc7-4d2d-8e73-1a88bfe60c22">
 <br/><br/>
 
 
