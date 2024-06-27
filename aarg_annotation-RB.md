@@ -1,4 +1,4 @@
-# Manual _spidroin_ annotation in the silver garden spider _Argiope argentata_ 
+# Manual _spidroin_ annotation for _Argiope argentata_ 
 
 ## Cluster Setup and File Pathways | (October 11, 2023)
 For this workflow, I'll be working in my own huxley workspace in the following directory:
