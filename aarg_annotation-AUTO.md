@@ -206,3 +206,4 @@ Above, we again import the same files, and check the structure to confirm the in
 It's important to note that Augustus _ab initio_ gene prediction should serve as a first step, and has been known to sometimes include/exclude additional introns that may not be present. It will be important to prune the _ab initio_ annotations carefully when measuring allelic diversity through gene length, CDS region length, and number of exons. 
 
 To try and improve this first pass annotation, we will also be trying to train the Augustus annotation with RNAseq data, or a concatonated CDS fasta for all known spidroins.
+
