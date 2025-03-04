@@ -9,9 +9,9 @@ The goals for this pipeline are to automate the process of:
 2) Extracting all putitive spidroins per haplotype
 3) Running _ab initio_ and trained gene prediction to determine intron/exon boundaries
 4) Determining full length (bp), CDS length, and # of exons for spidroins from each haplotype across multiple populations.
-  - 5 California: AargB1, AargC1, AargH1, AargF1 and AargG2 
-  - 1 Texas: AargTX
-  - 1 Florida: AargVK1
+  - 5 California Genomes: AargB1, AargC1, AargH1, AargF1 and AargG2 
+  - 2 Texas Genomes: AargTX, AargKing1
+  - 3 Florida Genomes: AargVK1, AargVK2, AargADB1
 
 
 ## Step 1) Identifying and Sorting _Spidroins_ with BlastX/BlastN & Excel
@@ -45,7 +45,7 @@ blastn -task blastn -query /home/amarkee/nas4/aargentata_genome/assemblies/haplo
 ```
 - Formula sheet for determining spidroin full length, notes on MiSp(rev) and MaSp2a-e, and including flanking region in list file.
 ```
-Taking abs(min()) and abs(max)) of paired termini set from blast hits
+Taking abs(min()) and abs(max()) of paired termini set from blast hits
 ```
 - Safe as xlsx, and create a list text file called "coordinates.txt" with the following information in the following order:
     - contig, gene start coordinate, gene end coordinate, gene name
