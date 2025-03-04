@@ -16,8 +16,37 @@ The goals for this pipeline are to automate the process of:
 
 ## Step 1) Identifying and Sorting _Spidroins_ with BlastX/BlastN & Excel
 - Run initial BLAST on each haplotype genome vs. _Argiope argentata_ termini database
+```
+#PBS -V
+#PBS -q batch 
+#PBS -l select=1:ncpus=25
+#PBS -o /home/amarkee/nas4/aargentata_genome/blastx/aarg_pbFL/aargki2_blast/hap1
+#PBS -e /home/amarkee/nas4/aargentata_genome/blastx/aarg_pbFL/aargki2_blast/hap1
+#PBS -M amarkee@amnh.org
+#PBS -m abe
+#PBS -N blastn_aarg_c1h2
+#PBS -l walltime=999:00:00
+
+module load ncbi-blast-2.12.0+
+
+blastn -task blastn -query /home/amarkee/nas4/aargentata_genome/assemblies/haplotype_asm/AargKI2_I_hap1_ctg.fa -db /home/amarkee/nas4/aargentata_genome/db_files/aarg_nt/Aarg_10X_JustTermini_II.fa -outfmt 6 -max_target_seqs 100 -evalue 1e-15 -out /home/amarkee/nas4/aargentata_genome/blastx/aarg_pbFL/aargki2_blast/hap1 ki2-h1_results.txt
+```
 - Sorting steps from Joe in Excel
+```
+1. GENOME BLAST vs curated DB (opsin, for example)
+2. From these hits, I remove duplicates in Excel as follows:
+- create additional column for rounded start positions; for opsins my Excel equation looks like this: MROUND($STARTPOSITIONCELL, 500)
+- Sort: CONTIG ID > ROUNDED START >  E VAL (low to high)
+- Remove duplication (Data Tab) by: CONTIG ID and ROUNDED START
+- This leaves the best hits for each contig that is at least 500bp apart
+3. Use this reduced file to create list input for the script
+- Reduce to CONTIG ID, START, END co
+- I add some bases up/downstream to start/end to grab a little extra ~1000bp
+```
 - Formula sheet for determining spidroin full length, notes on MiSp(rev) and MaSp2a-e, and including flanking region in list file.
+```
+Taking abs(min()) and abs(max)) of paired termini set from blast hits
+```
 - Safe as xlsx, and create a list text file called "coordinates.txt" with the following information in the following order:
     - contig, gene start coordinate, gene end coordinate, gene name
 
