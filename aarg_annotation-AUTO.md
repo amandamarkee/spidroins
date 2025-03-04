@@ -29,7 +29,7 @@ The goals for this pipeline are to automate the process of:
 
 module load ncbi-blast-2.12.0+
 
-blastn -task blastn -query /home/amarkee/nas4/aargentata_genome/assemblies/haplotype_asm/AargKI2_I_hap1_ctg.fa -db /home/amarkee/nas4/aargentata_genome/db_files/aarg_nt/Aarg_10X_JustTermini_II.fa -outfmt 6 -max_target_seqs 100 -evalue 1e-15 -out /home/amarkee/nas4/aargentata_genome/blastx/aarg_pbFL/aargki2_blast/hap1 ki2-h1_results.txt
+blastn -task blastn -query /home/amarkee/nas4/aargentata_genome/assemblies/haplotype_asm/AargKI2_I_hap1_ctg.fa -db /home/amarkee/nas4/aargentata_genome/db_files/aarg_nt/Aarg_10X_JustTermini_II.fa -outfmt 6 -max_target_seqs 100 -evalue 1e-15 -out /home/amarkee/nas4/aargentata_genome/blastx/aarg_pbFL/aargki2_blast/hap1/ki2-h1_results.txt
 ```
 - Sorting steps from Joe in Excel
 ```
