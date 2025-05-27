@@ -160,7 +160,7 @@ augustus --strand=both --singlestrand=true \
 --gff3=on \
 --uniqueGeneId=true \
 --UTR=off \
---species=fly \
+--species=parasteatoda \
 $gene > \
 $output
 ```
